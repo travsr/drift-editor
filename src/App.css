@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  color: #0f0f0f;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+#root {
+  outline: 0.5px solid #000;
+  border: 1px solid #ffffff42;
+  outline-offset: 0px;
+  border-radius: 10px;
+
+  position: absolute;
+  inset: 0.5px;
+}
+
+#titlebar-drag-region {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+}
+
+#middle-panel {
+  box-shadow: rgba(0, 0, 0, 0.44) 0 0 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* color: #f6f6f6; */
+    /* background-color: #2f2f2f; */
+  }
+}
