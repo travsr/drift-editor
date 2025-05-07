@@ -25,13 +25,13 @@
 #titlebar-drag-region {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 100px;
     right: 0;
     height: 40px;
 }
 
 #middle-panel {
-    box-shadow: rgba(0, 0, 0, 0.44) 0 0 12px;
+    box-shadow: rgba(0, 0, 0, 0.318) 0 0 22px;
 }
 
 @media (prefers-color-scheme: dark) {
