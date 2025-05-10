@@ -18,13 +18,17 @@
                 "width": 800,
                 "height": 600,
                 "transparent": true,
-                "decorations": false,
+                "decorations": true,
                 "shadow": false,
                 "windowEffects": {
                     "effects": ["menu", "mica"],
                     "radius": 10
                 },
-                "titleBarStyle": "Overlay"
+                "titleBarStyle": "Overlay",
+                "trafficLightPosition": {
+                    "x": 18,
+                    "y": 18
+                }
             }
         ],
         "security": {

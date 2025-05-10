@@ -20,6 +20,7 @@
 
     position: absolute;
     inset: 0.5px;
+    overflow: hidden;
 }
 
 #titlebar-drag-region {
@@ -28,9 +29,10 @@
     left: 100px;
     right: 0;
     height: 40px;
+    z-index: 9999;
 }
 
-#middle-panel {
+#content-view {
     box-shadow: rgba(0, 0, 0, 0.318) 0 0 22px;
 }
 

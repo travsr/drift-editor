@@ -1,18 +1,18 @@
-import type { D_ContentViewProps, D_DocumentFile } from "@schemas/index";
-import { type Accessor, For, Switch, Match } from "solid-js";
+import type { D_DocumentFile, D_UIState } from "@schemas/index";
+import { For, Switch, Match } from "solid-js";
 import { Editor } from "./components";
 
-export const ContentView = ({
-    props,
-}: {
-    props: Accessor<D_ContentViewProps>;
-}) => {
-    const documents = () => props().documents;
+type ContentViewProps = {
+    content: D_UIState["content"];
+};
+
+export const ContentView = (props: ContentViewProps) => {
+    const documents = () => props.content.documents;
 
     return (
         <div
-            id="middle-panel"
-            class="relative flex-1 bg-[#222] rounded-md mb-4 overflow-hidden"
+            id="content-view"
+            class="relative flex-1 bg-[#222] rounded-md overflow-hidden"
         >
             <For each={documents()}>
                 {(doc) => (

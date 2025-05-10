@@ -1,30 +1,29 @@
-import type { D_TabViewProps } from "@schemas/index";
 import { For, type Accessor } from "solid-js";
+import type { D_Tab } from "@schemas/D_Tab";
+import classNames from "classnames";
 
-import { SidebarLeft } from "../Icons";
-import { WindowControls } from "../WindowControls";
+type TabViewProps = {
+    tabs: D_Tab[];
+};
 
-export const TabView = ({
-    props,
-}: {
-    props: Accessor<D_TabViewProps>;
-}) => (
-    <div class="w-30">
-        <div class="flex items-center gap-4 pl-1">
-            <WindowControls />
-            <div class="opacity-50">
-                <SidebarLeft />
-            </div>
-        </div>
-
-        <div class="flex flex-col gap-2 mt-2">
-            <For each={props().tabs}>
-                {(tab, index) => (
-                    <div class="rounded-2xl bg-[#ffffff33] h-9 flex text-center items-center justify-center text-sm text-white">
-                        {tab.title}
-                    </div>
-                )}
-            </For>
-        </div>
+export const TabView = (props: TabViewProps) => (
+    <div class="flex flex-col gap-2">
+        <For each={props.tabs}>
+            {(tab, index) => (
+                <div
+                    class={classNames(
+                        "rounded-2xl cursor-default select-none",
+                        "text-center text-[12px] text-white",
+                        "h-9 flex items-center justify-center",
+                        "hover:bg-white/10",
+                        {
+                            "!bg-white/20": tab.isSelected,
+                        },
+                    )}
+                >
+                    <p>{tab.title}</p>
+                </div>
+            )}
+        </For>
     </div>
 );

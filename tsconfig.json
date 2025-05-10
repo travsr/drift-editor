@@ -25,7 +25,8 @@
         "baseUrl": ".", // usually your root
         "paths": {
             "@components/*": ["src/components/*"],
-            "@schemas/*": ["src/schemas/*"]
+            "@schemas/*": ["src/schemas/*"],
+            "@state/*": ["src/state/*"]
         }
     },
     "include": ["src"],
