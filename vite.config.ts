@@ -3,14 +3,11 @@ import solid from "vite-plugin-solid";
 import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 
-import monacoEditorPlugin from "vite-plugin-monaco-editor";
-
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-    plugins: [solid(), tailwindcss(), (monacoEditorPlugin as any).default({})],
+    plugins: [solid(), tailwindcss()],
 
     // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
     //

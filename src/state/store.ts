@@ -60,6 +60,6 @@ export const [appState, setAppState] = createStore<D_UIState>({
     },
     ui: {
         isOverlayActive: false,
-        sidebar: "tree",
+        sidebar: "tabs",
     },
 });

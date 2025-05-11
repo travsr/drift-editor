@@ -1,6 +1,6 @@
 import type { D_DocumentFile, D_UIState } from "@schemas/index";
 import { For, Switch, Match } from "solid-js";
-import { Editor } from "./components";
+import { CodeMirrorEditor } from "./components/index";
 
 type ContentViewProps = {
     content: D_UIState["content"];
@@ -18,7 +18,7 @@ export const ContentView = (props: ContentViewProps) => {
                 {(doc) => (
                     <Switch>
                         <Match when={doc.type === "file"}>
-                            <Editor file={doc as D_DocumentFile} />
+                            <CodeMirrorEditor />
                         </Match>
                         <Match when={doc.type === "terminal"}>
                             <div>💻 Terminal: {doc.title}</div>

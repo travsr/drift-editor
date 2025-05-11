@@ -59,7 +59,7 @@ function App() {
 
     return (
         <>
-            <div id="titlebar-drag-region" data-tauri-drag-region />
+            {/* <div id="titlebar-drag-region" data-tauri-drag-region /> */}
             <main
                 class={classNames(
                     "absolute inset-0 z-10 flex flex-row gap-2 p-2",
