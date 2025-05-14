@@ -12,8 +12,7 @@ import classNames from "classnames";
 import "./App.css";
 
 import { TabView, ContentView, FileTree } from "@components/index";
-import { DetailView } from "@components/DetailView";
-import { appState } from "@state/store";
+import { windowState } from "@state/store";
 import { Folder, Server } from "./assets";
 
 function App() {
@@ -73,17 +72,17 @@ function App() {
                         <Server />
                     </div>
                     <Switch>
-                        <Match when={appState.ui.sidebar === "tabs"}>
-                            <TabView tabs={appState.tabs} />
+                        <Match when={windowState.ui.sidebar === "tabs"}>
+                            <TabView tabs={windowState.tabs} />
                         </Match>
-                        <Match when={appState.ui.sidebar === "tree"}>
-                            <FileTree node={appState.fileTree} />
+                        <Match when={windowState.ui.sidebar === "tree"}>
+                            <FileTree node={windowState.file_tree} />
                         </Match>
                     </Switch>
                 </div>
                 {/* <DetailView props={detailView} /> */}
                 <div class="flex-1 flex flex-col gap-2">
-                    <ContentView content={appState.content} />
+                    <ContentView content={windowState.content} />
                 </div>
             </main>
 

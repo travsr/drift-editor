@@ -1,16 +1,23 @@
-import type { D_UIState } from "@schemas/D_AppState";
+import {
+    DDocumentStatus,
+    DDocumentType,
+    DFileTreeNodeType,
+    DSidebarType,
+    type DWindowState,
+} from "@schemas/shared_types";
 import { createStore } from "solid-js/store";
 
-export const [appState, setAppState] = createStore<D_UIState>({
+export const [windowState, setWindowState] = createStore<DWindowState>({
+    id: "window-1",
     tabs: [
         {
             id: "tab-1",
             title: "OpenFile.tsx",
-            isSelected: true,
-            documentRefs: [
+            is_selected: true,
+            document_refs: [
                 {
                     id: "document-1",
-                    type: "file",
+                    type: DDocumentType.File,
                     title: "Text Document.txt",
                 },
             ],
@@ -18,11 +25,11 @@ export const [appState, setAppState] = createStore<D_UIState>({
         {
             id: "tab-2",
             title: "file2.tsx",
-            isSelected: false,
-            documentRefs: [
+            is_selected: false,
+            document_refs: [
                 {
                     id: "document-1",
-                    type: "file",
+                    type: DDocumentType.File,
                     title: "Text Document.txt",
                 },
             ],
@@ -33,33 +40,33 @@ export const [appState, setAppState] = createStore<D_UIState>({
             {
                 id: "document-1",
                 title: "Test Document",
-                type: "file",
-                status: "new",
+                type: DDocumentType.File,
+                status: DDocumentStatus.New,
                 buffer: "Hello world.",
-                filePath: "/",
+                file_path: "/",
             },
         ],
     },
-    fileTree: {
+    file_tree: {
         path: "/",
-        type: "folder",
+        type: DFileTreeNodeType.Folder,
         name: "root",
-        isExpanded: true,
+        is_expanded: true,
         children: [
             {
                 path: "/utils",
-                type: "file",
+                type: DFileTreeNodeType.File,
                 name: "utils",
             },
             {
                 path: "/utils",
-                type: "file",
+                type: DFileTreeNodeType.File,
                 name: "schemas",
             },
         ],
     },
     ui: {
-        isOverlayActive: false,
-        sidebar: "tabs",
+        is_overlay_active: false,
+        sidebar: DSidebarType.Tabs,
     },
 });

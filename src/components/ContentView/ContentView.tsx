@@ -1,9 +1,9 @@
-import type { D_DocumentFile, D_UIState } from "@schemas/index";
 import { For, Switch, Match } from "solid-js";
 import { CodeMirrorEditor } from "./components/index";
+import type { DWindowState } from "@schemas/index";
 
 type ContentViewProps = {
-    content: D_UIState["content"];
+    content: DWindowState["content"];
 };
 
 export const ContentView = (props: ContentViewProps) => {

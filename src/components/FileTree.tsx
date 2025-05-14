@@ -1,8 +1,8 @@
 import { For, Show } from "solid-js";
-import type { D_FileTreeNode } from "@schemas/index";
+import type { DFileTreeNode } from "@schemas/index";
 
 type FileTreeProps = {
-    node: D_FileTreeNode;
+    node: DFileTreeNode;
     level?: number;
 };
 
@@ -19,11 +19,11 @@ export const FileTree = (props: FileTreeProps) => {
                 onKeyDown={() => {}}
                 onKeyUp={() => {}}
             >
-                {isFolder ? (props.node.isExpanded ? "📂" : "📁") : "📄"}{" "}
+                {isFolder ? (props.node.is_expanded ? "📂" : "📁") : "📄"}{" "}
                 {props.node.name}
             </div>
 
-            <Show when={isFolder && props.node.isExpanded}>
+            <Show when={isFolder && props.node.is_expanded}>
                 <For each={props.node.children}>
                     {(child) => (
                         <FileTree node={child} level={(props.level ?? 0) + 1} />

@@ -1,9 +1,9 @@
-import { For, type Accessor } from "solid-js";
-import type { D_Tab } from "@schemas/D_Tab";
+import { For } from "solid-js";
+import type { DTab } from "@schemas/index";
 import classNames from "classnames";
 
 type TabViewProps = {
-    tabs: D_Tab[];
+    tabs: DTab[];
 };
 
 export const TabView = (props: TabViewProps) => (
@@ -17,7 +17,7 @@ export const TabView = (props: TabViewProps) => (
                         "h-9 flex items-center justify-center",
                         "hover:bg-white/10",
                         {
-                            "!bg-white/20": tab.isSelected,
+                            "!bg-white/20": tab.is_selected,
                         },
                     )}
                 >
