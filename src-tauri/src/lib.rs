@@ -1,6 +1,8 @@
+mod classes;
 mod models;
 
-use tauri::Manager;
+use classes::drift_app::DriftApp;
+use tauri::{async_runtime::Mutex, Manager};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -10,7 +12,6 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 fn select_tab(name: &str) -> String {
-
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
@@ -47,10 +48,7 @@ fn delete_document(name: &str) -> String {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
-        .setup(|app| {
-            let window = app.get_webview_window("main").unwrap();
-            Ok(())
-        })
+        .manage(Mutex::new(DriftApp::new()))
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![greet])
         .run(tauri::generate_context!())

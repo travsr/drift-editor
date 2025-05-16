@@ -1,5 +1,3 @@
-import type { Accessor } from "solid-js";
-
 type DetailViewProps = {
     value: string;
 };

@@ -1,0 +1,32 @@
+use std::{collections::HashMap, sync::Mutex, vec};
+
+use crate::models::{d_app_state::DAppState, d_tab::DTab};
+
+pub struct DriftApp {
+    pub app_state: DAppState,
+}
+
+impl DriftApp {
+    pub fn new() -> Self {
+        let app_state = DAppState {
+            windows: HashMap::new(),
+        };
+        DriftApp { app_state }
+    }
+
+    pub fn write_document(&self, window_id: &str, document_id: &str) {}
+    pub fn open_tab(&mut self, window_id: &str, document_id: &str) {
+        if let Some(window) = self.app_state.windows.get_mut(window_id) {
+            window.tabs.push(DTab {
+                id: "".to_string(),
+                title: "".to_string(),
+                document_refs: vec![],
+                is_selected: true,
+            });
+        } else {
+            // handle missing window_id gracefully
+        }
+    }
+    pub fn close_tab(&self, window_id: &str, tab_id: &str) {}
+    pub fn select_tab(&self, window_id: &str, tab_id: &str) {}
+}
