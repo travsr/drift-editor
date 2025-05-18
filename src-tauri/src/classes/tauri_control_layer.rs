@@ -2,7 +2,7 @@ use anyhow::Result;
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder},
     window::{Effect, EffectState, EffectsBuilder},
-    AppHandle, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindowBuilder,
+    AppHandle, Emitter, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindowBuilder,
 };
 
 use crate::{models::d_app_state::DAppState, traits::app_control_layer::AppControlLayer};
@@ -18,7 +18,7 @@ impl TauriAppControlLayer {
 }
 
 impl AppControlLayer for TauriAppControlLayer {
-    fn init_frontend(&self, app_state: &DAppState) -> Result<()> {
+    fn init_frontend(&self, _app_state: &DAppState) -> Result<()> {
         let effects = EffectsBuilder::new()
             .effects(vec![Effect::Menu, Effect::Mica])
             .radius(10.0)
@@ -78,7 +78,17 @@ impl AppControlLayer for TauriAppControlLayer {
 
         Ok(())
     }
-    fn emit_event(&self, window_id: &str, tab_id: &str) -> Result<()> {
+
+    /// Broadcasts window states to all tauri windows
+    fn emit_app_state(&self, app_state: &DAppState) -> Result<()> {
+        for (window_id, window_state) in &app_state.windows {
+            if let Err(e) = self
+                .app_handle
+                .emit_to(window_id, "window-state", window_state)
+            {
+                println!("Failed to emit to window '{}': {}", window_id, e);
+            }
+        }
         Ok(())
     }
 }

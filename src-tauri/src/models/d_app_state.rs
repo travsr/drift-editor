@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{anyhow, Context, Result};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
@@ -46,5 +46,17 @@ impl DAppState {
             .context("Failed to write to config file")?;
 
         Ok(())
+    }
+
+    pub fn get_window_state(&mut self, window_id: &str) -> Result<&DWindowState> {
+        self.windows
+            .get(window_id)
+            .ok_or_else(|| anyhow!("Window ID not found"))
+    }
+
+    pub fn get_window_state_mut(&mut self, window_id: &str) -> Result<&mut DWindowState> {
+        self.windows
+            .get_mut(window_id)
+            .ok_or_else(|| anyhow!("Window ID not found"))
     }
 }

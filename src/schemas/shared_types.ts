@@ -8,10 +8,18 @@ export enum DDocumentType {
 	Settings = "settings",
 }
 
+export enum DDocumentStatus {
+	New = "new",
+	SavedToFs = "saved-to-fs",
+	Modified = "modified",
+}
+
 export interface DDocumentRef {
 	id: string;
 	title: string;
 	type: DDocumentType;
+	file_path: string;
+	status: DDocumentStatus;
 }
 
 export interface DTab {
@@ -19,12 +27,6 @@ export interface DTab {
 	title: string;
 	document_refs: DDocumentRef[];
 	is_selected: boolean;
-}
-
-export enum DDocumentStatus {
-	New = "new",
-	SavedToFs = "saved-to-fs",
-	Modified = "modified",
 }
 
 export interface DDocument {
