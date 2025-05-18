@@ -13,13 +13,12 @@
 }
 
 #root {
-    outline: 0.5px solid #000;
     border: 1px solid #ffffff42;
     outline-offset: 0px;
     border-radius: 10px;
 
     position: absolute;
-    inset: 0.5px;
+    inset: 0px;
     overflow: hidden;
 }
 

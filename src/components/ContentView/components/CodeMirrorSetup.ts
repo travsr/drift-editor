@@ -75,9 +75,9 @@ export function createEditorState(
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
     ];
 
-    if (options.oneDark) {
-        extensions.push(oneDark);
-    }
+    // if (options.oneDark) {
+    //     extensions.push(oneDark);
+    // }
 
     if (options.onUpdate) {
         extensions.push(
@@ -86,6 +86,28 @@ export function createEditorState(
             }),
         );
     }
+
+    const myTheme = EditorView.theme({
+        "&": {
+            color: "white",
+            backgroundColor: "#1e1e1e",
+        },
+        ".cm-content": {
+            fontFamily: "monospace",
+            fontSize: "14px",
+        },
+        ".cm-cursor": {},
+        "&.cm-focused .cm-selectionBackground, ::selection": {
+            backgroundColor: "#444",
+        },
+        ".cm-gutters": {
+            backgroundColor: "#2e2e2e",
+            color: "#ccc",
+            border: "none",
+        },
+    });
+
+    extensions.push(myTheme);
 
     return EditorState.create({
         doc: initialContents,

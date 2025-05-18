@@ -11,26 +11,7 @@
     },
     "app": {
         "macOSPrivateApi": true,
-        "windows": [
-            {
-                "title": "drift",
-                "hiddenTitle": true,
-                "width": 800,
-                "height": 600,
-                "transparent": true,
-                "decorations": true,
-                "shadow": false,
-                "windowEffects": {
-                    "effects": ["menu", "mica"],
-                    "radius": 10
-                },
-                "titleBarStyle": "Overlay",
-                "trafficLightPosition": {
-                    "x": 18,
-                    "y": 18
-                }
-            }
-        ],
+        "windows": [],
         "security": {
             "csp": null
         }

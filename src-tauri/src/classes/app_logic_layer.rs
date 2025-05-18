@@ -1,17 +1,27 @@
-use std::{collections::HashMap, sync::Mutex, vec};
+use std::{collections::HashMap, sync::Arc, vec};
 
-use crate::models::{d_app_state::DAppState, d_tab::DTab};
+use crate::{
+    models::{d_app_state::DAppState, d_tab::DTab},
+    traits::app_control_layer::AppControlLayer,
+};
 
-pub struct DriftApp {
-    pub app_state: DAppState,
+pub struct AppLogicLayer {
+    app_state: DAppState,
+    app_control_layer: Arc<dyn AppControlLayer>,
 }
 
-impl DriftApp {
-    pub fn new() -> Self {
+impl AppLogicLayer {
+    pub fn new(app_control_layer: Arc<dyn AppControlLayer>) -> Self {
         let app_state = DAppState {
             windows: HashMap::new(),
         };
-        DriftApp { app_state }
+
+        app_control_layer.init_frontend(&app_state);
+
+        AppLogicLayer {
+            app_state,
+            app_control_layer,
+        }
     }
 
     pub fn write_document(&self, window_id: &str, document_id: &str) {}

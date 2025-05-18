@@ -1,5 +1,11 @@
-use std::collections::HashMap;
-use serde::{Serialize, Deserialize};
+use anyhow::{Context, Result};
+use serde::{Deserialize, Serialize};
+use std::{
+    collections::HashMap,
+    fs::{create_dir_all, File},
+    io::{Read, Write},
+    path::Path,
+};
 use typeshare::typeshare;
 
 use super::d_window_state::DWindowState;
@@ -8,4 +14,37 @@ use super::d_window_state::DWindowState;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct DAppState {
     pub windows: HashMap<String, DWindowState>,
+}
+
+impl DAppState {
+    pub fn read_from(file_path: &str) -> Result<Self> {
+        let path = Path::new(file_path);
+
+        let mut content = String::new();
+        File::open(path)
+            .with_context(|| format!("Failed to open config file at {:?}", path))?
+            .read_to_string(&mut content)
+            .context("Failed to read config file")?;
+
+        serde_json::from_str(&content).context("Failed to deserialize config JSON into AppState")
+    }
+
+    pub fn write_to(&self, file_path: &str) -> Result<()> {
+        let path = Path::new(file_path);
+
+        if let Some(parent) = path.parent() {
+            create_dir_all(parent)
+                .with_context(|| format!("Failed to create directory {:?}", parent))?;
+        }
+
+        let json =
+            serde_json::to_string_pretty(self).context("Failed to serialize AppState to JSON")?;
+
+        File::create(path)
+            .with_context(|| format!("Failed to create config file at {:?}", path))?
+            .write_all(json.as_bytes())
+            .context("Failed to write to config file")?;
+
+        Ok(())
+    }
 }

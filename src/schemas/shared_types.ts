@@ -67,6 +67,7 @@ export interface DWindowState {
 	id: string;
 	tabs: DTab[];
 	content: DWindowContent;
+	file_path: string;
 	file_tree: DFileTreeNode;
 	ui: DInterface;
 }

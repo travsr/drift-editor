@@ -17,6 +17,7 @@ pub struct DWindowState {
     pub id: String,
     pub tabs: Vec<DTab>,
     pub content: DWindowContent,
+    pub file_path: String,
     pub file_tree: DFileTreeNode,
     pub ui: DInterface,
 }
