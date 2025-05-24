@@ -8,7 +8,10 @@ use crate::{
         d_app_state::DAppState,
         d_document::{DDocument, DDocumentType},
         d_document_ref::DDocumentRef,
+        d_file_tree_node::DFileTreeNode,
+        d_interface::DInterface,
         d_tab::DTab,
+        d_window_state::{DWindowContent, DWindowState},
     },
     traits::app_control_layer::AppControlLayer,
 };
@@ -25,8 +28,55 @@ pub struct AppLogicLayer {
 
 impl AppLogicLayer {
     pub fn new(app_control_layer: Arc<dyn AppControlLayer>) -> Result<Self> {
+        let mut window_map = HashMap::new();
+
+        window_map.insert(
+            "window-1".to_string(),
+            DWindowState {
+                id: "window-1".to_string(),
+                content: DWindowContent { documents: vec![] },
+                tabs: vec![DTab {
+                    id: "tab-1".to_string(),
+                    title: "My Tab".to_string(),
+                    document_refs: vec![],
+                    is_selected: true,
+                }],
+                file_path: "".to_string(),
+                file_tree: DFileTreeNode {
+                    name: "file tree root".to_string(),
+                    path: "".to_string(),
+                    r#type: crate::models::d_file_tree_node::DFileTreeNodeType::Folder,
+                    children: None,
+                    is_expanded: Some(false),
+                },
+                ui: DInterface {
+                    is_overlay_active: false,
+                    sidebar: crate::models::d_interface::DSidebarType::Tabs,
+                },
+            },
+        );
+        window_map.insert(
+            "window-2".to_string(),
+            DWindowState {
+                id: "window-2".to_string(),
+                content: DWindowContent { documents: vec![] },
+                tabs: vec![],
+                file_path: "".to_string(),
+                file_tree: DFileTreeNode {
+                    name: "file tree root".to_string(),
+                    path: "".to_string(),
+                    r#type: crate::models::d_file_tree_node::DFileTreeNodeType::Folder,
+                    children: None,
+                    is_expanded: Some(false),
+                },
+                ui: DInterface {
+                    is_overlay_active: false,
+                    sidebar: crate::models::d_interface::DSidebarType::Tabs,
+                },
+            },
+        );
         let app_state = DAppState {
-            windows: HashMap::new(),
+            windows: window_map,
         };
 
         app_control_layer.init_frontend(&app_state)?;
@@ -112,6 +162,13 @@ impl AppLogicLayer {
             bail!("Tab not found.")
         }
 
+        Ok(())
+    }
+
+    pub fn window_hydrate(&self, window_id: &str) -> Result<()> {
+        if let Some(window) = self.app_state.windows.get(window_id) {
+            self.app_control_layer.emit_window_state(window)?;
+        }
         Ok(())
     }
 

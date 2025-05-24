@@ -14,6 +14,7 @@ import "./App.css";
 import { TabView, ContentView, FileTree } from "@components/index";
 import { windowState } from "@state/store";
 import { Folder, Server } from "./assets";
+import { startEventListener } from "./surface";
 
 function App() {
     const [greetMsg, setGreetMsg] = createSignal("");
@@ -26,6 +27,8 @@ function App() {
     }
 
     const [lastKey, setLastKey] = createSignal<string | null>(null);
+
+    startEventListener();
 
     onMount(() => {
         // Tauri window keyboard capture (fallback for full native apps)
