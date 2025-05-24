@@ -12,15 +12,16 @@ export const startEventListener = () => {
 
     onMount(() => {
         console.log("[event-listener] mounted app.");
-        console.log(getCurrentWindow());
         const window = getCurrentWindow();
 
-        listen<DWindowState>("window_state_update", (event) => {
-            console.log("[event-listener] received event", event);
-            if (event.payload.id === window.label) {
+        listen<DWindowState>(
+            "window_state_update",
+            (event) => {
+                console.log("[event-listener] received event", event);
                 setWindowState(event.payload);
-            }
-        }).then((unlisten) => {
+            },
+            { target: window.label },
+        ).then((unlisten) => {
             invoke("tc_window_ready");
             cleanup = unlisten;
         });

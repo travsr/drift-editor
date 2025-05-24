@@ -12,7 +12,7 @@ import classNames from "classnames";
 import "./App.css";
 
 import { TabView, ContentView, FileTree } from "@components/index";
-import { windowState } from "@state/store";
+import { isWindowHydrated, windowState } from "@state/store";
 import { Folder, Server } from "./assets";
 import { startEventListener } from "./surface";
 
@@ -60,7 +60,7 @@ function App() {
     });
 
     return (
-        <>
+        <Show when={isWindowHydrated()}>
             {/* <div id="titlebar-drag-region" data-tauri-drag-region /> */}
             <main
                 class={classNames(
@@ -94,7 +94,7 @@ function App() {
                     <div class="absolute right-8 top-8 w-60 bottom-8 bg-[#333] rounded z-100" />
                 </div>
             </Show>
-        </>
+        </Show>
     );
 }
 

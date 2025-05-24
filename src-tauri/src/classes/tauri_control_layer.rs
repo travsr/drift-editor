@@ -2,7 +2,8 @@ use anyhow::{Context, Result};
 use tauri::{
     menu::{MenuBuilder, MenuItemBuilder, SubmenuBuilder},
     window::{Effect, EffectState, EffectsBuilder},
-    AppHandle, Emitter, PhysicalPosition, TitleBarStyle, WebviewUrl, WebviewWindowBuilder,
+    AppHandle, Emitter, EventTarget, PhysicalPosition, TitleBarStyle, WebviewUrl,
+    WebviewWindowBuilder,
 };
 
 use crate::{
@@ -117,7 +118,7 @@ impl AppControlLayer for TauriAppControlLayer {
         );
         self.app_handle
             .emit_to(
-                window_state.id.to_owned(),
+                EventTarget::webview_window(window_state.id.to_owned()),
                 "window_state_update",
                 window_state,
             )
