@@ -4,7 +4,7 @@ use typeshare::typeshare;
 use super::d_document::{DDocumentStatus, DDocumentType};
 
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DDocumentRef {
     pub id: String,
     pub title: String,

@@ -32,7 +32,7 @@
 }
 
 #content-view {
-    box-shadow: rgba(0, 0, 0, 0.318) 0 0 22px;
+    /* box-shadow: rgba(0, 0, 0, 0.318) 0 0 22px; */
 }
 
 @media (prefers-color-scheme: dark) {

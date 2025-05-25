@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
@@ -6,18 +8,18 @@ use super::{
 };
 
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DWindowContent {
     pub documents: Vec<DDocument>,
 }
 
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DWindowState {
     pub id: String,
     pub tabs: Vec<DTab>,
     pub content: DWindowContent,
     pub file_path: String,
-    pub file_tree: DFileTreeNode,
+    pub file_map: HashMap<String, DFileTreeNode>,
     pub ui: DInterface,
 }

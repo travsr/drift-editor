@@ -90,13 +90,16 @@ export function createEditorState(
     const myTheme = EditorView.theme({
         "&": {
             color: "white",
-            backgroundColor: "#1e1e1e",
+            backgroundColor: "#transparent",
         },
         ".cm-content": {
             fontFamily: "monospace",
             fontSize: "14px",
         },
         ".cm-cursor": {},
+        ".cm-editor": {
+            backgroundColor: "transparent",
+        },
         "&.cm-focused .cm-selectionBackground, ::selection": {
             backgroundColor: "#444",
         },

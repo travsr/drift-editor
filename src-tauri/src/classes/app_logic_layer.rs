@@ -1,17 +1,18 @@
-use std::{collections::HashMap, fs, sync::Arc, vec};
+use std::{collections::HashMap, sync::Arc, vec};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, Result};
 use uuid::Uuid;
 
 use crate::{
+    helpers::{create_file_tree_map::create_file_tree_map, diff_scopes::diff_scopes},
     models::{
         d_app_state::DAppState,
         d_document::{DDocument, DDocumentType},
         d_document_ref::DDocumentRef,
-        d_file_tree_node::DFileTreeNode,
         d_interface::DInterface,
         d_tab::DTab,
         d_window_state::{DWindowContent, DWindowState},
+        d_window_state_scope::DWindowStateScope,
     },
     traits::app_control_layer::AppControlLayer,
 };
@@ -34,24 +35,27 @@ impl AppLogicLayer {
             "window-1".to_string(),
             DWindowState {
                 id: "window-1".to_string(),
-                content: DWindowContent { documents: vec![] },
+                content: DWindowContent {
+                    documents: vec![DDocument {
+                        id: "doc-1".to_string(),
+                        r#type: DDocumentType::File,
+                        title: "document 1".to_string(),
+                        file_path: "".to_string(),
+                        buffer: "My buffer".to_string(),
+                        status: crate::models::d_document::DDocumentStatus::Modified,
+                    }],
+                },
                 tabs: vec![DTab {
                     id: "tab-1".to_string(),
                     title: "My Tab".to_string(),
                     document_refs: vec![],
                     is_selected: true,
                 }],
-                file_path: "".to_string(),
-                file_tree: DFileTreeNode {
-                    name: "file tree root".to_string(),
-                    path: "".to_string(),
-                    r#type: crate::models::d_file_tree_node::DFileTreeNodeType::Folder,
-                    children: None,
-                    is_expanded: Some(false),
-                },
+                file_path: "/Users/travis/Developer".to_string(),
+                file_map: create_file_tree_map("/Users/travis/Developer"),
                 ui: DInterface {
                     is_overlay_active: false,
-                    sidebar: crate::models::d_interface::DSidebarType::Tabs,
+                    sidebar: crate::models::d_interface::DSidebarType::Tree,
                 },
             },
         );
@@ -62,13 +66,7 @@ impl AppLogicLayer {
                 content: DWindowContent { documents: vec![] },
                 tabs: vec![],
                 file_path: "".to_string(),
-                file_tree: DFileTreeNode {
-                    name: "file tree root".to_string(),
-                    path: "".to_string(),
-                    r#type: crate::models::d_file_tree_node::DFileTreeNodeType::Folder,
-                    children: None,
-                    is_expanded: Some(false),
-                },
+                file_map: HashMap::new(),
                 ui: DInterface {
                     is_overlay_active: false,
                     sidebar: crate::models::d_interface::DSidebarType::Tabs,
@@ -92,8 +90,9 @@ impl AppLogicLayer {
         let app_state = self.get_transaction_app_state_mut()?;
         let window_state = app_state.get_window_state_mut(window_id)?;
 
-        let file_content = fs::read_to_string(file_path)
-            .with_context(|| format!("Failed to read file at '{}'", file_path))?;
+        // let file_content = fs::read_to_string(file_path)
+        //     .with_context(|| format!("Failed to read file at '{}'", file_path))?;
+        let file_content = "file content".to_string();
 
         let tab_id = Uuid::new_v4().to_string();
 
@@ -167,7 +166,8 @@ impl AppLogicLayer {
 
     pub fn window_hydrate(&self, window_id: &str) -> Result<()> {
         if let Some(window) = self.app_state.windows.get(window_id) {
-            self.app_control_layer.emit_window_state(window)?;
+            self.app_control_layer
+                .emit_window_state(DWindowStateScope::All, window)?;
         }
         Ok(())
     }
@@ -193,8 +193,26 @@ impl AppLogicLayer {
 
     pub fn commit(&mut self) -> Result<()> {
         if let Some(transaction) = self.transaction.take() {
-            self.app_state = transaction.app_state;
-            self.app_control_layer.emit_app_state(&self.app_state)
+            let next_app_state = transaction.app_state.clone();
+
+            for (window_id, next_window_state) in next_app_state.windows.clone() {
+                if let Some(prev_window_state) = self.app_state.windows.get(&window_id) {
+                    let scopes = diff_scopes(prev_window_state, &next_window_state);
+
+                    for scope in scopes {
+                        self.app_control_layer
+                            .emit_window_state(scope, &next_window_state)?;
+                    }
+                } else {
+                    println!("Falling back to emit the ALL scope");
+                    self.app_control_layer
+                        .emit_window_state(DWindowStateScope::All, &next_window_state)?;
+                }
+            }
+
+            self.app_state = next_app_state;
+
+            Ok(())
         } else {
             bail!("No transaction to commit");
         }

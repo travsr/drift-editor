@@ -7,7 +7,15 @@ use tauri::{
 };
 
 use crate::{
-    models::{d_app_state::DAppState, d_window_state::DWindowState},
+    models::{
+        d_app_state::DAppState,
+        d_window_event_payload::{
+            DWindowEventPayloadAll, DWindowEventPayloadContent, DWindowEventPayloadFileMap,
+            DWindowEventPayloadTabs,
+        },
+        d_window_state::DWindowState,
+        d_window_state_scope::DWindowStateScope,
+    },
     traits::app_control_layer::AppControlLayer,
 };
 
@@ -41,7 +49,7 @@ impl TauriAppControlLayer {
             .shadow(true)
             .effects(effects)
             .title_bar_style(TitleBarStyle::Overlay)
-            .traffic_light_position(PhysicalPosition::new(36.0, 36.0))
+            .traffic_light_position(PhysicalPosition::new(32.0, 40.0))
             .build()?;
         }
 
@@ -59,9 +67,13 @@ impl TauriAppControlLayer {
             .quit_with_text("Quit Drift Editor")
             .build()?;
 
+        let item_open = MenuItemBuilder::new("Open Project")
+            .accelerator("CmdOrCtrl+O")
+            .build(&self.app_handle)?;
+
         let file_menu = SubmenuBuilder::new(&self.app_handle, "File")
-            .text("open", "Open")
-            .text("quit", "Quit")
+            .item(&item_open)
+            .quit()
             .item(&item1)
             .separator()
             .build()?;
@@ -111,23 +123,77 @@ impl AppControlLayer for TauriAppControlLayer {
     }
 
     // Emit a single Window State to its corresponding window
-    fn emit_window_state(&self, window_state: &DWindowState) -> Result<()> {
+    fn emit_window_state(
+        &self,
+        scope: DWindowStateScope,
+        window_state: &DWindowState,
+    ) -> Result<()> {
+        let event_name = "window_state_update";
+        let target = EventTarget::webview_window(window_state.id.to_owned());
+
         println!(
-            "emit_window_state: Updating single window {}",
-            window_state.id
+            "[window_state_update]: scope: {} window-id {}",
+            scope, window_state.id
         );
-        self.app_handle
-            .emit_to(
-                EventTarget::webview_window(window_state.id.to_owned()),
-                "window_state_update",
-                window_state,
-            )
-            .with_context(|| {
-                format!(
-                    "emit_window_state: Failed to emit to window '{}'",
-                    window_state.id
-                )
-            })?;
+
+        match scope {
+            DWindowStateScope::All => {
+                let payload = DWindowEventPayloadAll {
+                    scope,
+                    window_state: window_state.to_owned(),
+                };
+                self.app_handle
+                    .emit_to(target, &event_name, payload)
+                    .with_context(|| {
+                        format!(
+                            "emit_window_state: Failed to emit to window '{}'",
+                            window_state.id
+                        )
+                    })?;
+            }
+            DWindowStateScope::FileMap => {
+                let payload = DWindowEventPayloadFileMap {
+                    scope,
+                    file_map: window_state.file_map.to_owned(),
+                };
+                self.app_handle
+                    .emit_to(target, &event_name, payload)
+                    .with_context(|| {
+                        format!(
+                            "emit_window_state: Failed to emit to window '{}'",
+                            window_state.id
+                        )
+                    })?;
+            }
+            DWindowStateScope::Tabs => {
+                let payload = DWindowEventPayloadTabs {
+                    scope,
+                    tabs: window_state.tabs.to_owned(),
+                };
+                self.app_handle
+                    .emit_to(target, &event_name, payload)
+                    .with_context(|| {
+                        format!(
+                            "emit_window_state: Failed to emit to window '{}'",
+                            window_state.id
+                        )
+                    })?;
+            }
+            DWindowStateScope::Content => {
+                let payload = DWindowEventPayloadContent {
+                    scope,
+                    content: window_state.content.to_owned(),
+                };
+                self.app_handle
+                    .emit_to(target, &event_name, payload)
+                    .with_context(|| {
+                        format!(
+                            "emit_window_state: Failed to emit to window '{}'",
+                            window_state.id
+                        )
+                    })?;
+            }
+        }
 
         Ok(())
     }

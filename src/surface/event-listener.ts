@@ -1,11 +1,42 @@
-import { listen } from "@tauri-apps/api/event";
+import { type EventCallback, listen } from "@tauri-apps/api/event";
 
 import { onCleanup, onMount } from "solid-js";
 
-import { setWindowState } from "@state/store";
-import type { DWindowState } from "@schemas/shared_types";
+import { setIsWindowHydrated, setWindowState } from "@state/store";
+import {
+    type DWindowEventPayloadAll,
+    DWindowStateScope,
+    type DWindowEventPayload,
+    type DWindowEventPayloadTabs,
+} from "@schemas/shared_types";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+
+const windowStateUpdateHandler: EventCallback<DWindowEventPayload> = (
+    event,
+) => {
+    console.log("[windowStateUpdate] Received event", event);
+    setIsWindowHydrated(true);
+
+    switch (event.payload.scope) {
+        case DWindowStateScope.All: {
+            const payload = event.payload as DWindowEventPayloadAll;
+            setWindowState(payload.window_state);
+            break;
+        }
+        case DWindowStateScope.Content: {
+            break;
+        }
+        case DWindowStateScope.FileMap: {
+            break;
+        }
+        case DWindowStateScope.Tabs: {
+            const payload = event.payload as DWindowEventPayloadTabs;
+            setWindowState("tabs", payload.tabs);
+            break;
+        }
+    }
+};
 
 export const startEventListener = () => {
     let cleanup: () => void;
@@ -14,12 +45,9 @@ export const startEventListener = () => {
         console.log("[event-listener] mounted app.");
         const window = getCurrentWindow();
 
-        listen<DWindowState>(
+        listen<DWindowEventPayload>(
             "window_state_update",
-            (event) => {
-                console.log("[event-listener] received event", event);
-                setWindowState(event.payload);
-            },
+            windowStateUpdateHandler,
             { target: window.label },
         ).then((unlisten) => {
             invoke("tc_window_ready");

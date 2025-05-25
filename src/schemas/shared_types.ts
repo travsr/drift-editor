@@ -42,17 +42,11 @@ export interface DWindowContent {
 	documents: DDocument[];
 }
 
-export enum DFileTreeNodeType {
-	File = "file",
-	Folder = "folder",
-}
-
 export interface DFileTreeNode {
+	id: string;
 	name: string;
-	path: string;
-	type: DFileTreeNodeType;
 	is_expanded?: boolean;
-	children?: DFileTreeNode[];
+	children: string[];
 }
 
 export enum DSidebarType {
@@ -70,11 +64,42 @@ export interface DWindowState {
 	tabs: DTab[];
 	content: DWindowContent;
 	file_path: string;
-	file_tree: DFileTreeNode;
+	file_map: Record<string, DFileTreeNode>;
 	ui: DInterface;
 }
 
 export interface DAppState {
 	windows: Record<string, DWindowState>;
+}
+
+export enum DWindowStateScope {
+	All = "All",
+	FileMap = "FileMap",
+	Tabs = "Tabs",
+	Content = "Content",
+}
+
+export interface DWindowEventPayload {
+	scope: DWindowStateScope;
+}
+
+export interface DWindowEventPayloadAll {
+	scope: DWindowStateScope;
+	window_state: DWindowState;
+}
+
+export interface DWindowEventPayloadContent {
+	scope: DWindowStateScope;
+	content: DWindowContent;
+}
+
+export interface DWindowEventPayloadFileMap {
+	scope: DWindowStateScope;
+	file_map: Record<string, DFileTreeNode>;
+}
+
+export interface DWindowEventPayloadTabs {
+	scope: DWindowStateScope;
+	tabs: DTab[];
 }
 

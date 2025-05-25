@@ -11,7 +11,7 @@ use typeshare::typeshare;
 use super::d_window_state::DWindowState;
 
 #[typeshare]
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DAppState {
     pub windows: HashMap<String, DWindowState>,
 }

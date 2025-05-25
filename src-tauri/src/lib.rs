@@ -1,4 +1,5 @@
 mod classes;
+mod helpers;
 mod models;
 mod traits;
 

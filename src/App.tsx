@@ -11,7 +11,7 @@ import classNames from "classnames";
 
 import "./App.css";
 
-import { TabView, ContentView, FileTree } from "@components/index";
+import { TabView, ContentView, FileTreeNode } from "@components/index";
 import { isWindowHydrated, windowState } from "@state/store";
 import { Folder, Server } from "./assets";
 import { startEventListener } from "./surface";
@@ -61,7 +61,7 @@ function App() {
 
     return (
         <Show when={isWindowHydrated()}>
-            {/* <div id="titlebar-drag-region" data-tauri-drag-region /> */}
+            <div id="titlebar-drag-region" data-tauri-drag-region />
             <main
                 class={classNames(
                     "absolute inset-0 z-10 flex flex-row gap-2 p-2",
@@ -69,23 +69,29 @@ function App() {
                     { blur: isOverlayActive() },
                 )}
             >
-                <div class="w-40 flex flex-col gap-4 pt-8">
-                    <div class="flex items-center justify-center gap-2 text-white/30">
-                        <Folder />
-                        <Server />
-                    </div>
+                <div class="w-40 pt-8">
+                    <TabView tabs={windowState.tabs} />
+                </div>
+                {/* <DetailView props={detailView} /> */}
+                <div class="flex-1 flex flex-col gap-2">
+                    {/* <ContentView content={windowState.content} /> */}
+                </div>
+                <div class="w-60 flex flex-col gap-4 overflow-auto">
                     <Switch>
                         <Match when={windowState.ui.sidebar === "tabs"}>
                             <TabView tabs={windowState.tabs} />
                         </Match>
                         <Match when={windowState.ui.sidebar === "tree"}>
-                            <FileTree node={windowState.file_tree} />
+                            <FileTreeNode
+                                nodeId={windowState.file_path}
+                                fileTree={windowState.file_map}
+                            />
                         </Match>
                     </Switch>
-                </div>
-                {/* <DetailView props={detailView} /> */}
-                <div class="flex-1 flex flex-col gap-2">
-                    <ContentView content={windowState.content} />
+                    <div class="flex items-center justify-center gap-2 text-white/30">
+                        <Folder />
+                        <Server />
+                    </div>
                 </div>
             </main>
 

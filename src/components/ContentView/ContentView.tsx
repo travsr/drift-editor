@@ -12,7 +12,7 @@ export const ContentView = (props: ContentViewProps) => {
     return (
         <div
             id="content-view"
-            class="relative flex-1 bg-[#222] rounded-md overflow-hidden"
+            class="relative flex-1 bg-[#222]/90 rounded-md overflow-hidden"
         >
             <For each={documents()}>
                 {(doc) => (
