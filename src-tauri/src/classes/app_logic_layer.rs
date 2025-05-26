@@ -1,10 +1,10 @@
-use std::{collections::HashMap, sync::Arc, vec};
+use std::{collections::HashMap, path::Path, sync::Arc, vec};
 
 use anyhow::{bail, Result};
 use uuid::Uuid;
 
 use crate::{
-    helpers::{create_file_tree_map::create_file_tree_map, diff_scopes::diff_scopes},
+    helpers::{create_file_tree_vec::create_file_tree_vec, diff_scopes::diff_scopes},
     models::{
         d_app_state::DAppState,
         d_document::{DDocument, DDocumentType},
@@ -52,7 +52,7 @@ impl AppLogicLayer {
                     is_selected: true,
                 }],
                 file_path: "/Users/travis/Developer".to_string(),
-                file_map: create_file_tree_map("/Users/travis/Developer"),
+                file_list: create_file_tree_vec("/Users/travis/Developer"),
                 ui: DInterface {
                     is_overlay_active: false,
                     sidebar: crate::models::d_interface::DSidebarType::Tree,
@@ -66,7 +66,7 @@ impl AppLogicLayer {
                 content: DWindowContent { documents: vec![] },
                 tabs: vec![],
                 file_path: "".to_string(),
-                file_map: HashMap::new(),
+                file_list: vec![],
                 ui: DInterface {
                     is_overlay_active: false,
                     sidebar: crate::models::d_interface::DSidebarType::Tabs,
@@ -96,8 +96,15 @@ impl AppLogicLayer {
 
         let tab_id = Uuid::new_v4().to_string();
 
+        let path = Path::new(file_path);
+        let document_title = path
+            .file_name()
+            .map(|s| s.to_string_lossy().into_owned())
+            .unwrap_or_else(|| file_path.to_string());
+
+        // let document_title = "Test title".to_string();
+
         let document_id = Uuid::new_v4().to_string();
-        let document_title = file_path.to_string();
 
         for tab in &mut window_state.tabs {
             tab.is_selected = false;
@@ -113,7 +120,7 @@ impl AppLogicLayer {
 
         window_state.content.documents = vec![DDocument {
             id: document_id,
-            title: document_title,
+            title: document_title.clone(),
             r#type: DDocumentType::File,
             file_path: file_path.to_string(),
             status: crate::models::d_document::DDocumentStatus::SavedToFs,
@@ -122,7 +129,7 @@ impl AppLogicLayer {
 
         window_state.tabs.push(DTab {
             id: tab_id,
-            title: file_path.to_string(),
+            title: document_title,
             document_refs: vec![document_ref],
             is_selected: true,
         });

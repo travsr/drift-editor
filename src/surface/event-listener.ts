@@ -15,7 +15,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 const windowStateUpdateHandler: EventCallback<DWindowEventPayload> = (
     event,
 ) => {
-    console.log("[windowStateUpdate] Received event", event);
+    // console.log("[windowStateUpdate] Received event", event);
     setIsWindowHydrated(true);
 
     switch (event.payload.scope) {
@@ -25,9 +25,11 @@ const windowStateUpdateHandler: EventCallback<DWindowEventPayload> = (
             break;
         }
         case DWindowStateScope.Content: {
+            // To implement
             break;
         }
-        case DWindowStateScope.FileMap: {
+        case DWindowStateScope.FileList: {
+            // To implement
             break;
         }
         case DWindowStateScope.Tabs: {

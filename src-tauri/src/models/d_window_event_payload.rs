@@ -39,7 +39,7 @@ pub struct DWindowEventPayloadContent {
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub struct DWindowEventPayloadFileMap {
+pub struct DWindowEventPayloadFileList {
     pub scope: DWindowStateScope,
-    pub file_map: HashMap<String, DFileTreeNode>,
+    pub file_list: Vec<DFileTreeNode>,
 }

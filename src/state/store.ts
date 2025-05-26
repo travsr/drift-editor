@@ -9,7 +9,7 @@ export const [windowState, setWindowState] = createStore<DWindowState>({
         documents: [],
     },
     file_path: "~/",
-    file_map: {},
+    file_list: [],
     ui: {
         is_overlay_active: false,
         sidebar: DSidebarType.Tabs,

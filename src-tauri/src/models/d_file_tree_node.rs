@@ -8,4 +8,5 @@ pub struct DFileTreeNode {
     pub name: String,
     pub is_expanded: Option<bool>,
     pub children: Vec<String>,
+    pub level: u16,
 }

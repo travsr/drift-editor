@@ -10,6 +10,8 @@
     -webkit-text-size-adjust: 100%;
     position: absolute;
     inset: 0;
+    overscroll-behavior: none;
+    overflow: none;
 }
 
 #root {

@@ -20,6 +20,6 @@ pub struct DWindowState {
     pub tabs: Vec<DTab>,
     pub content: DWindowContent,
     pub file_path: String,
-    pub file_map: HashMap<String, DFileTreeNode>,
+    pub file_list: Vec<DFileTreeNode>,
     pub ui: DInterface,
 }

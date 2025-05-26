@@ -47,6 +47,7 @@ export interface DFileTreeNode {
 	name: string;
 	is_expanded?: boolean;
 	children: string[];
+	level: number;
 }
 
 export enum DSidebarType {
@@ -64,7 +65,7 @@ export interface DWindowState {
 	tabs: DTab[];
 	content: DWindowContent;
 	file_path: string;
-	file_map: Record<string, DFileTreeNode>;
+	file_list: DFileTreeNode[];
 	ui: DInterface;
 }
 
@@ -74,7 +75,7 @@ export interface DAppState {
 
 export enum DWindowStateScope {
 	All = "All",
-	FileMap = "FileMap",
+	FileList = "FileList",
 	Tabs = "Tabs",
 	Content = "Content",
 }
@@ -93,9 +94,9 @@ export interface DWindowEventPayloadContent {
 	content: DWindowContent;
 }
 
-export interface DWindowEventPayloadFileMap {
+export interface DWindowEventPayloadFileList {
 	scope: DWindowStateScope;
-	file_map: Record<string, DFileTreeNode>;
+	file_list: DFileTreeNode[];
 }
 
 export interface DWindowEventPayloadTabs {

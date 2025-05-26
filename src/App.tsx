@@ -1,4 +1,5 @@
 import {
+    createMemo,
     createSignal,
     Match,
     onCleanup,
@@ -11,10 +12,20 @@ import classNames from "classnames";
 
 import "./App.css";
 
-import { TabView, ContentView, FileTreeNode } from "@components/index";
+import { TabView, ContentView, FileTree } from "@components/index";
 import { isWindowHydrated, windowState } from "@state/store";
-import { Folder, Server } from "./assets";
+import { Folder, Server, Box } from "./assets";
 import { startEventListener } from "./surface";
+
+const handleClick = () => {
+    // console.log(props.nodeId);
+
+    // if (!isFolder()) {
+    // invoke("tc_tab_open", { filePath: props.nodeId });
+    console.timeEnd();
+    console.time();
+    // }
+};
 
 function App() {
     const [greetMsg, setGreetMsg] = createSignal("");
@@ -59,6 +70,8 @@ function App() {
         });
     });
 
+    const rootFilePath = createMemo(() => windowState.file_path);
+
     return (
         <Show when={isWindowHydrated()}>
             <div id="titlebar-drag-region" data-tauri-drag-region />
@@ -70,27 +83,25 @@ function App() {
                 )}
             >
                 <div class="w-40 pt-8">
-                    <TabView tabs={windowState.tabs} />
+                    <TabView />
                 </div>
                 {/* <DetailView props={detailView} /> */}
                 <div class="flex-1 flex flex-col gap-2">
-                    {/* <ContentView content={windowState.content} /> */}
+                    <ContentView content={windowState.content} />
                 </div>
-                <div class="w-60 flex flex-col gap-4 overflow-auto">
+                <div class="w-60 flex flex-col gap-4">
                     <Switch>
                         <Match when={windowState.ui.sidebar === "tabs"}>
-                            <TabView tabs={windowState.tabs} />
+                            <TabView />
                         </Match>
                         <Match when={windowState.ui.sidebar === "tree"}>
-                            <FileTreeNode
-                                nodeId={windowState.file_path}
-                                fileTree={windowState.file_map}
-                            />
+                            <FileTree />
                         </Match>
                     </Switch>
                     <div class="flex items-center justify-center gap-2 text-white/30">
                         <Folder />
                         <Server />
+                        <Box />
                     </div>
                 </div>
             </main>

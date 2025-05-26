@@ -1,11 +1,11 @@
-use std::{collections::HashMap, fs, path::Path};
+use std::{fs, path::Path};
 
 use crate::models::d_file_tree_node::DFileTreeNode;
 
-pub fn create_file_tree_map(root_path: &str) -> HashMap<String, DFileTreeNode> {
-    let mut map = HashMap::new();
+pub fn create_file_tree_vec(root_path: &str) -> Vec<DFileTreeNode> {
+    let mut vector: Vec<DFileTreeNode> = vec![];
 
-    fn walk(path: &Path, map: &mut HashMap<String, DFileTreeNode>) -> Option<String> {
+    fn walk(path: &Path, vector: &mut Vec<DFileTreeNode>, level: u16) -> Option<String> {
         let path_str = path.to_string_lossy(); // only allocated once when needed
         let id = path_str.to_string(); // used for ID and map key
         let name = path
@@ -19,26 +19,25 @@ pub fn create_file_tree_map(root_path: &str) -> HashMap<String, DFileTreeNode> {
             if let Ok(entries) = fs::read_dir(path) {
                 for entry in entries.flatten() {
                     let child_path = entry.path();
-                    if let Some(child_id) = walk(&child_path, map) {
+                    if let Some(child_id) = walk(&child_path, vector, level + 1) {
                         children.push(child_id);
                     }
                 }
             }
         }
 
-        map.insert(
-            id.clone(),
-            DFileTreeNode {
-                id: id.clone(),
-                name,
-                is_expanded: Some(true),
-                children: children,
-            },
-        );
+        vector.push(DFileTreeNode {
+            id: id.clone(),
+            name,
+            is_expanded: Some(true),
+            children: children,
+            level,
+        });
 
         Some(id)
     }
 
-    walk(Path::new(root_path), &mut map);
-    map
+    walk(Path::new(root_path), &mut vector, 0);
+    vector.reverse();
+    vector
 }

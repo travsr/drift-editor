@@ -10,7 +10,7 @@ use crate::{
     models::{
         d_app_state::DAppState,
         d_window_event_payload::{
-            DWindowEventPayloadAll, DWindowEventPayloadContent, DWindowEventPayloadFileMap,
+            DWindowEventPayloadAll, DWindowEventPayloadContent, DWindowEventPayloadFileList,
             DWindowEventPayloadTabs,
         },
         d_window_state::DWindowState,
@@ -151,10 +151,10 @@ impl AppControlLayer for TauriAppControlLayer {
                         )
                     })?;
             }
-            DWindowStateScope::FileMap => {
-                let payload = DWindowEventPayloadFileMap {
+            DWindowStateScope::FileList => {
+                let payload = DWindowEventPayloadFileList {
                     scope,
-                    file_map: window_state.file_map.to_owned(),
+                    file_list: window_state.file_list.to_owned(),
                 };
                 self.app_handle
                     .emit_to(target, &event_name, payload)
