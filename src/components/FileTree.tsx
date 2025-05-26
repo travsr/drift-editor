@@ -79,7 +79,7 @@ export const FileTreeNode = (props: FileTreeNodeProps) => {
         >
             <div
                 class="cursor-pointer select-none text-white text-[12px] break-keep"
-                style={{ "margin-left": `${node().level * 3}px` }}
+                style={{ "margin-left": `${node().level * 5}px` }}
                 onKeyDown={() => {}}
                 onKeyUp={() => {}}
             >

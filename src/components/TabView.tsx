@@ -43,8 +43,8 @@ export const TabView = () => {
                                 <div
                                     class={classNames(
                                         "rounded-2xl cursor-default select-none flex-1",
-                                        "text-center text-[12px] text-white/70",
-                                        "h-9 flex items-center justify-center",
+                                        "text-[12px] text-white/70",
+                                        "h-9 flex items-center px-4",
                                         "hover:bg-white/10 hover:text-white",
                                         {
                                             "!bg-white/20 !text-white":

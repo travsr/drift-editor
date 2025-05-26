@@ -6,7 +6,8 @@ mod traits;
 use std::sync::{Arc, Mutex};
 
 use classes::{
-    app_logic_layer::AppLogicLayer, tauri_command_layer, tauri_control_layer::TauriAppControlLayer,
+    app_logic::app_logic_layer::AppLogicLayer, tauri_command_layer,
+    tauri_control_layer::TauriAppControlLayer,
 };
 
 use tauri::Manager;

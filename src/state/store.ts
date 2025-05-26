@@ -6,7 +6,7 @@ export const [windowState, setWindowState] = createStore<DWindowState>({
     id: "unhydrated",
     tabs: [],
     content: {
-        documents: [],
+        content_items: [],
     },
     file_path: "~/",
     file_list: [],

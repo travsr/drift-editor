@@ -7,7 +7,6 @@ import {
     Show,
     Switch,
 } from "solid-js";
-import { invoke } from "@tauri-apps/api/core";
 import classNames from "classnames";
 
 import "./App.css";
@@ -17,27 +16,8 @@ import { isWindowHydrated, windowState } from "@state/store";
 import { Folder, Server, Box } from "./assets";
 import { startEventListener } from "./surface";
 
-const handleClick = () => {
-    // console.log(props.nodeId);
-
-    // if (!isFolder()) {
-    // invoke("tc_tab_open", { filePath: props.nodeId });
-    console.timeEnd();
-    console.time();
-    // }
-};
-
 function App() {
-    const [greetMsg, setGreetMsg] = createSignal("");
-    const [name, setName] = createSignal("");
     const [isOverlayActive, setIsOverlayActive] = createSignal(false);
-
-    async function greet() {
-        // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-        setGreetMsg(await invoke("greet", { name: name() }));
-    }
-
-    const [lastKey, setLastKey] = createSignal<string | null>(null);
 
     startEventListener();
 
@@ -69,8 +49,6 @@ function App() {
             window.removeEventListener("keydown", handleKey);
         });
     });
-
-    const rootFilePath = createMemo(() => windowState.file_path);
 
     return (
         <Show when={isWindowHydrated()}>

@@ -13,8 +13,8 @@ use crate::{
             DWindowEventPayloadAll, DWindowEventPayloadContent, DWindowEventPayloadFileList,
             DWindowEventPayloadTabs,
         },
+        d_window_event_scope::DWindowEventScope,
         d_window_state::DWindowState,
-        d_window_state_scope::DWindowStateScope,
     },
     traits::app_control_layer::AppControlLayer,
 };
@@ -125,7 +125,7 @@ impl AppControlLayer for TauriAppControlLayer {
     // Emit a single Window State to its corresponding window
     fn emit_window_state(
         &self,
-        scope: DWindowStateScope,
+        scope: DWindowEventScope,
         window_state: &DWindowState,
     ) -> Result<()> {
         let event_name = "window_state_update";
@@ -137,7 +137,7 @@ impl AppControlLayer for TauriAppControlLayer {
         );
 
         match scope {
-            DWindowStateScope::All => {
+            DWindowEventScope::All => {
                 let payload = DWindowEventPayloadAll {
                     scope,
                     window_state: window_state.to_owned(),
@@ -151,7 +151,7 @@ impl AppControlLayer for TauriAppControlLayer {
                         )
                     })?;
             }
-            DWindowStateScope::FileList => {
+            DWindowEventScope::FileList => {
                 let payload = DWindowEventPayloadFileList {
                     scope,
                     file_list: window_state.file_list.to_owned(),
@@ -165,7 +165,7 @@ impl AppControlLayer for TauriAppControlLayer {
                         )
                     })?;
             }
-            DWindowStateScope::Tabs => {
+            DWindowEventScope::Tabs => {
                 let payload = DWindowEventPayloadTabs {
                     scope,
                     tabs: window_state.tabs.to_owned(),
@@ -179,7 +179,7 @@ impl AppControlLayer for TauriAppControlLayer {
                         )
                     })?;
             }
-            DWindowStateScope::Content => {
+            DWindowEventScope::Content => {
                 let payload = DWindowEventPayloadContent {
                     scope,
                     content: window_state.content.to_owned(),

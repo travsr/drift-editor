@@ -7,24 +7,24 @@ type ContentViewProps = {
 };
 
 export const ContentView = (props: ContentViewProps) => {
-    const documents = () => props.content.documents;
+    const contentItems = () => props.content.content_items;
 
     return (
         <div
             id="content-view"
             class="relative flex-1 bg-[#222]/90 rounded-md overflow-hidden"
         >
-            <For each={documents()}>
-                {(doc) => (
+            <For each={contentItems()}>
+                {(contentItem) => (
                     <Switch>
-                        <Match when={doc.type === "file"}>
+                        <Match when={contentItem.type === "file"}>
                             <CodeMirrorEditor />
                         </Match>
-                        <Match when={doc.type === "terminal"}>
-                            <div>💻 Terminal: {doc.title}</div>
+                        <Match when={contentItem.type === "terminal"}>
+                            <div>💻 Terminal</div>
                         </Match>
-                        <Match when={doc.type === "settings"}>
-                            <div>⚙️ Settings: {doc.title}</div>
+                        <Match when={contentItem.type === "settings"}>
+                            <div>⚙️ Settings</div>
                         </Match>
                     </Switch>
                 )}

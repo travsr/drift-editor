@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
-use super::d_document_ref::DDocumentRef;
+use super::d_content_item::DContentItemRef;
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DTab {
     pub id: String,
     pub title: String,
-    pub document_refs: Vec<DDocumentRef>,
     pub is_selected: bool,
+    pub content_item_refs: Vec<DContentItemRef>,
 }

@@ -5,14 +5,14 @@ use typeshare::typeshare;
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
-pub enum DWindowStateScope {
+pub enum DWindowEventScope {
     All,
     FileList,
     Tabs,
     Content,
 }
 
-impl Display for DWindowStateScope {
+impl Display for DWindowEventScope {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::All => write!(f, "all"),

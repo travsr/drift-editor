@@ -5,7 +5,7 @@ use std::sync::Mutex;
 
 use tauri::State;
 
-use super::app_logic_layer::AppLogicLayer;
+use super::app_logic::app_logic_layer::{AppLogicLayer, TabLogic};
 
 #[tauri::command]
 pub fn tc_tab_open(

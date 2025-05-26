@@ -1,16 +1,16 @@
-use std::collections::HashMap;
-
 use serde::{Deserialize, Serialize};
 use typeshare::typeshare;
 
 use super::{
-    d_document::DDocument, d_file_tree_node::DFileTreeNode, d_interface::DInterface, d_tab::DTab,
+    d_content_item::DContentItem, d_file_tree_node::DFileTreeNode, d_interface::DInterface,
+    d_tab::DTab,
 };
 
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DWindowContent {
-    pub documents: Vec<DDocument>,
+    pub content_items: Vec<DContentItem>,
+    // pub layout_type // This is where other meta properties could go for each tab (Like layout, frame widths, etc)
 }
 
 #[typeshare]
