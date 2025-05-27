@@ -48,7 +48,7 @@ impl DAppState {
         Ok(())
     }
 
-    pub fn get_window_state(&mut self, window_id: &str) -> Result<&DWindowState> {
+    pub fn get_window_state(&self, window_id: &str) -> Result<&DWindowState> {
         self.windows
             .get(window_id)
             .ok_or_else(|| anyhow!("Window ID not found"))

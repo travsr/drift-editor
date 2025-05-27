@@ -13,7 +13,6 @@ pub enum DDocumentStatus {
 #[typeshare]
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct DDocument {
-    pub id: String,
     pub title: String,
     pub file_path: String,
     pub buffer: String,

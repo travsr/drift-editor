@@ -8,12 +8,13 @@ import {
     DWindowEventScope,
     type DWindowEventPayload,
     type DWindowEventPayloadTabs,
+    type DWindowEventPayloadContent,
 } from "@schemas/shared_types";
 import { invoke } from "@tauri-apps/api/core";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
 const windowEventHandler: EventCallback<DWindowEventPayload> = (event) => {
-    // console.log("[windowStateUpdate] Received event", event);
+    console.log("[windowStateUpdate] Received event", event);
     setIsWindowHydrated(true);
 
     switch (event.payload.scope) {
@@ -23,7 +24,9 @@ const windowEventHandler: EventCallback<DWindowEventPayload> = (event) => {
             break;
         }
         case DWindowEventScope.Content: {
+            const payload = event.payload as DWindowEventPayloadContent;
             // To implement
+            setWindowState("content", payload.content);
             break;
         }
         case DWindowEventScope.FileList: {

@@ -2,6 +2,7 @@ import { For, createMemo } from "solid-js";
 import classNames from "classnames";
 import { createVirtualizer } from "@tanstack/solid-virtual";
 import { windowState } from "@state/store";
+import { invoke } from "@tauri-apps/api/core";
 
 export const TabView = () => {
     let scrollRef!: HTMLDivElement;
@@ -12,7 +13,6 @@ export const TabView = () => {
             estimateSize: () => 36,
             overscan: 10,
             count: windowState.tabs.length,
-            debug: true,
         }),
     );
 
@@ -34,6 +34,10 @@ export const TabView = () => {
                         const tab = windowState.tabs[virtualItem.index];
                         return (
                             <div
+                                onPointerDown={() => {
+                                    invoke("tc_tab_select", { tabId: tab.id });
+                                }}
+                                onKeyPress={() => {}}
                                 class="absolute top-0 left-0 right-0 flex items-center"
                                 style={{
                                     height: `${virtualItem.size}px`,

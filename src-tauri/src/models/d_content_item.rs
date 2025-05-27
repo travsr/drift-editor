@@ -18,7 +18,7 @@ pub struct DContentItemRef {
     #[serde(rename = "type")]
     pub r#type: DContentItemType,
 
-    pub document_id: Option<String>,
+    pub document_file_path: Option<String>,
 }
 
 #[typeshare]

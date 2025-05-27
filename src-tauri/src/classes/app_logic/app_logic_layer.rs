@@ -25,8 +25,8 @@ pub struct AppLogicTransaction {
 pub struct AppLogicLayer {
     app_state: DAppState,
     app_control_layer: Arc<dyn AppControlLayer>,
-    document_cache: HashMap<String, DDocument>,
-    transaction: Option<AppLogicTransaction>,
+    pub document_cache: HashMap<String, DDocument>,
+    pub transaction: Option<AppLogicTransaction>,
 }
 
 pub trait TabLogic {
@@ -36,8 +36,8 @@ pub trait TabLogic {
 }
 
 pub trait DocumentCacheLogic {
-    fn document_cache_retrieve(&self, document_id: &str) -> Result<&DDocument>;
-    fn document_cache_flush(&self) -> Result<()>;
+    fn document_cache_retrieve(&mut self, file_path: &str) -> Result<&DDocument>;
+    fn document_cache_flush(&mut self) -> Result<()>;
 }
 
 impl AppLogicLayer {
@@ -109,6 +109,14 @@ impl AppLogicLayer {
     pub fn get_transaction_app_state_mut(&mut self) -> Result<&mut DAppState> {
         if let Some(ref mut transaction) = self.transaction {
             Ok(&mut transaction.app_state)
+        } else {
+            bail!("No staged app state is present.");
+        }
+    }
+
+    pub fn get_transaction_app_state(&self) -> Result<&DAppState> {
+        if let Some(ref transaction) = self.transaction {
+            Ok(&transaction.app_state)
         } else {
             bail!("No staged app state is present.");
         }

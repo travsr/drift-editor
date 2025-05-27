@@ -10,7 +10,7 @@ export enum DContentItemType {
 
 export interface DContentItemRef {
 	type: DContentItemType;
-	document_id?: string;
+	document_file_path?: string;
 }
 
 export interface DTab {
@@ -27,7 +27,6 @@ export enum DDocumentStatus {
 }
 
 export interface DDocument {
-	id: string;
 	title: string;
 	file_path: string;
 	buffer: string;
